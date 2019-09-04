@@ -1,4 +1,4 @@
-@echo off
+REM @echo off
 CLS
 git pull
 call pkg createAngularElectronProj.js -o createAngularElectronProj.exe
