@@ -16,10 +16,6 @@ function logger(){
   return 0
 }
 
-function getElectronFile(){
-  return String.raw`dsergf`
-}
-
 process.argv.slice(2).forEach(a => {
   if (a == "-nr") routing = "true";
   if ("css, scss, sass, less".indexOf(a) !== -1) cssSchema = a;
@@ -40,7 +36,7 @@ projs.forEach(p => {
       cwd: pth,
       stdio: "inherit"
     })
-    execSync(`npm i -D electron@latest electron-reload@latest`, {
+    execSync(`npm i -D electron@latest electron-reload electron-packager npm-run-all wait-on`, {
       cwd: p,
       stdio: "inherit"
     })
@@ -55,6 +51,23 @@ projs.forEach(p => {
     name: "Shraddheya Shrivastava",
     website:'https://www.shraddheya.com'
   }
+  objThis,packagejson.scripts = {
+    "ng": "ng",
+    "ng:start": "ng serve",
+    "ng:build:watch": "ng build --watch",
+    "ng:build": "ng build --prod",
+    "ng:test": "ng test",
+    "ng:lint": "ng lint",
+    "ng:e2e": "ng e2e",
+    "el:start": "electron . --serve",
+    "el:start:wait": "wait-on http-get://localhost:4200/ && electron . --serve",
+    "el:start:wait:prod": "electron .",
+    "test": "npm-run-all -p ng:start el:start:wait",
+    "test:proj": "npm-run-all -p ng:build el:start:wait:prod",
+    "build:linux": "npm run ng:build && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "build:windows": "npm run ng:build && electron-packager . hrmseis --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"HRMS_EIS\"",
+    "build:mac": "npm run ng:build && electron-packager . hrmseis --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+  }
   fs.writeFile(angularjson, JSON.stringify(objThis.angularjson, null, 2), 'utf8', err=>{
     if (err)return logger(err)
   })
@@ -62,7 +75,8 @@ projs.forEach(p => {
     if (err)return logger(err)
   })
   fs.writeFile(electronMain, String.raw`const { app, BrowserWindow } = require('electron')
-
+const path = require('path')
+const url = require('url')
 var serve = process.argv.slice(1).some(function (val) { return val === '--serve' });
 
 let win
@@ -75,12 +89,10 @@ var createWindow= _=>{
       nodeIntegration: true
     }
   })
-
-
   if (serve) {
-    require('electron-reload')(__dirname, {
-        electron: require(__dirname + "/node_modules/electron")
-    });
+    // require('electron-reload')(__dirname, {
+    //     electron: require(__dirname + "/node_modules/electron")
+    // });
     win.loadURL('http://localhost:4200');
     win.webContents.openDevTools()
   } else {
@@ -90,16 +102,12 @@ var createWindow= _=>{
         slashes: true
     }))
   }
-
   win.on('closed', _=>win = null)
 }
-
 app.on('ready', createWindow)
-
 app.on('window-all-closed', _=>{
   if (process.platform !== 'darwin') app.quit()
 })
-
 app.on('activate', _=>{
   if (win === null) createWindow()
 })
@@ -113,13 +121,6 @@ app.on('activate', _=>{
       if (error) return logger(error)
     })
   })
-  // fs.readFile(packagejson, 'utf8', (err,d)=>{
-  //   if(err) return logger(err)
-  //   var result = d.replace('<base href="/">', '<base href="./">')
-  //   fs.writeFile(indexFile, result, 'utf8', error=>{
-  //     if (error) return logger(error)
-  //   })
-  // })
 
   //debug code
   execSync('code ' + p)
