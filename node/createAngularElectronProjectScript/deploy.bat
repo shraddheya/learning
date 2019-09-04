@@ -1,13 +1,13 @@
 @echo off
 CLS
 git pull
-echo 
+echo.
 echo packing
-echo 
+echo.
 call pkg createAngularElectronProj.js -o createAngularElectronProj.exe
-echo 
+echo.
 echo deploying
-echo 
+echo.
 git add .
 git commit -m "committing : %date%_%time% %1"
 git push --set-upstream origin master
