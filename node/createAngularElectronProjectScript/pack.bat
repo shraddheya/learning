@@ -1,1 +1,0 @@
-pkg createAngularElectronProj.js -o createAngularElectronProj.exe
