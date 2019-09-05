@@ -1,10 +1,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
-#include <sys/stat.h>
-#include <map>
 
 using namespace std;
 
