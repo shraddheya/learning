@@ -7,11 +7,7 @@
       "request": "launch",
       "preLaunchTask": "msvc build",
       "program": "${workspaceFolder}\\createCppProj.exe",
-      "args": [
-        // "C:\\Users\\shrad\\Documents\\00exp\\unversioned\\createAuto\\cpp\\testing_project0",
-        // "C:\\Users\\shrad\\Documents\\00exp\\unversioned\\createAuto\\cpp\\testing_project1",
-        "C:\\Users\\shrad\\Documents\\00exp\\unversioned\\createAuto\\cpp\\testing_project2"
-      ],
+      "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
