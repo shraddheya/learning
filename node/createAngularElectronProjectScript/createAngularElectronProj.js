@@ -19,7 +19,7 @@ function logger(){
 process.argv.slice(2).forEach(a => {
   if (a == "-nr") routing = "true";
   if ("css, scss, sass, less".indexOf(a) !== -1) cssSchema = a;
-  if ("css, scss, sass, less, -r".indexOf(a) === -1) projs.push(a);
+  if ("css, scss, sass, less, -nr".indexOf(a) === -1) projs.push(a);
 })
 
 projs.forEach(p => {
@@ -28,14 +28,17 @@ projs.forEach(p => {
   var nm = path.basename(p)
   var angularjson = path.join(p, 'angular.json')
   var packagejson = path.join(p, 'package.json')
+  var tsconfigjson = path.join(p, 'tsconfig.json')
   var indexFile = path.join(p, 'src', 'index.html')
   var electronMain = path.join(p, 'electronMain.js')
   if(!fs.existsSync(pth)) fs.mkdirSync(pth)
   if(!fs.existsSync(p)){
+    logger("\nStarting Project : " + p + "\n")
     execSync(`ng new ${nm} --routing ${routing} --style ${cssSchema}`, {
       cwd: pth,
       stdio: "inherit"
     })
+    logger("\nnpm i -D electron@latest electron-reload electron-packager npm-run-all wait-on\n")
     execSync(`npm i -D electron@latest electron-reload electron-packager npm-run-all wait-on`, {
       cwd: p,
       stdio: "inherit"
@@ -44,14 +47,16 @@ projs.forEach(p => {
   
   objThis.angularjson = require(angularjson)
   objThis.packagejson = require(packagejson)
+  objThis.tsconfigjson = require(tsconfigjson)
   objThis.angularjson.projects[nm].architect.build.options.outputPath = "dist"
+  objThis.tsconfigjson.compilerOptions.target = 'es5'
   objThis.packagejson.version = '0.0.0'
   objThis.packagejson.main = 'electronMain.js'
   objThis.packagejson.author = {
     name: "Shraddheya Shrivastava",
     website:'https://www.shraddheya.com'
   }
-  objThis,packagejson.scripts = {
+  objThis.packagejson.scripts = {
     "ng": "ng",
     "ng:start": "ng serve",
     "ng:build:watch": "ng build --watch",
@@ -65,13 +70,16 @@ projs.forEach(p => {
     "test": "npm-run-all -p ng:start el:start:wait",
     "test:proj": "npm-run-all -p ng:build el:start:wait:prod",
     "build:linux": "npm run ng:build && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "build:windows": "npm run ng:build && electron-packager . hrmseis --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"HRMS_EIS\"",
-    "build:mac": "npm run ng:build && electron-packager . hrmseis --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+    "build:windows": "npm run ng:build && electron-packager . " + nm + " --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"HRMS_EIS\"",
+    "build:mac": "npm run ng:build && electron-packager . " + nm + " --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
   }
   fs.writeFile(angularjson, JSON.stringify(objThis.angularjson, null, 2), 'utf8', err=>{
     if (err)return logger(err)
   })
   fs.writeFile(packagejson, JSON.stringify(objThis.packagejson, null, 2), 'utf8', err=>{
+    if (err)return logger(err)
+  })
+  fs.writeFile(tsconfigjson, JSON.stringify(objThis.tsconfigjson, null, 2), 'utf8', err=>{
     if (err)return logger(err)
   })
   fs.writeFile(electronMain, String.raw`const { app, BrowserWindow } = require('electron')
