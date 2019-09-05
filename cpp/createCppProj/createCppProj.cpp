@@ -5,11 +5,8 @@
 #include <string>
 #include <sys/stat.h>
 #include <map>
-#include "includes/json.hpp"
 
 using namespace std;
-using json = nlohmann::json;
-
 
 string getProjName (const string& str){
   size_t idx;

@@ -11,8 +11,8 @@
         "/Fe:",
         "createCppProj.exe",
         "createCppProj.cpp",
-        "/link",
-        "/LIBPATH:includes"
+        // "/link",
+        // "/LIBPATH:includes"
       ],
       "group": {
         "kind": "build",
