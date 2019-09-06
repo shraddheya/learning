@@ -7,7 +7,7 @@
       "request": "launch",
       "preLaunchTask": "msvc build",
       "program": "${workspaceFolder}\\createCppProj.exe",
-      "args": [],
+      "args": ["C:\\Users\\shrad\\Documents\\00exp\\gitLearning\\cpp\\createAngularElectronProject"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

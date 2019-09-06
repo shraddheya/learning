@@ -105,7 +105,11 @@ int main(int argc, const char** argv) {
   cout << "Hello Shraddheya" << endl;
   system("pause");
   return 0;
-} )""""";
+})""""";
+    char *  gitignoreT      = R"""""(*.exe
+*.ilk
+*.obj
+*.pdb)""""";
     #pragma endregion
     
     string  baseDirName     = argv[i];
@@ -115,27 +119,36 @@ int main(int argc, const char** argv) {
     string  launchfile      = vscodeDirName + "\\launch.json";
     string  tasksfile       = vscodeDirName + "\\tasks.json";
     string  mainFile        = baseDirName + "\\" + projName + ".cpp";
+    string  gitignoreF      = baseDirName + "\\.gitignore";
+    string  codeOpen        = "code " + baseDirName;
     CreateDirectoryA((char *)argv[i], NULL);
     CreateDirectoryA((char *)&vscodeDirName[0], NULL);
     ofstream mainFstream(mainFile);
-    mainFstream << mainText;
+    mainFstream       << mainText;
     mainFstream.close();
     ofstream configFstream(configfile);
-    configFstream << configjson;
+    configFstream     << configjson;
     configFstream.close();
     ofstream launchFstream(launchfile);
-    launchFstream << launchjson1 
-                  << projName
-                  << ".exe"
-                  << launchjson2;
+    launchFstream     << launchjson1 
+                      << projName
+                      << ".exe\""
+                      << launchjson2;
     launchFstream.close();
     ofstream tasksFstream(tasksfile);
-    tasksFstream  << tasksjson1
-                  << projName
-                  << ".exe\", \""
-                  << projName
-                  << ".cpp";
+    tasksFstream      << tasksjson1
+                      << projName
+                      << ".exe\", \""
+                      << projName
+                      << ".cpp"
+                      << tasksjson2;
     tasksFstream.close();
+    ofstream gitignoreFstream(gitignoreF);
+    gitignoreFstream  << gitignoreT;
+    tasksFstream.close();
+    try{
+      system(codeOpen.c_str());
+    }catch(const std::exception& e){ std::cerr << e.what() << '\n'; }
   }
   return 0;
 } 
