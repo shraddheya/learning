@@ -1,0 +1,23 @@
+{
+  "development": {
+    "storage": "./sql/hrms_eis_master.db3",
+    "dialect": "sqlite",
+    "logging" :false,
+    "multipleStatements" : true,
+    "operatorsAliases": false
+  },
+  "test": {
+    "storage": "./sql/hrms_eis_master.db3",
+    "dialect": "sqlite",
+    "logging" :false,
+    "multipleStatements" : true,
+    "operatorsAliases": false
+  },
+  "production": {
+    "storage": "./sql/hrms_eis_master.db3",
+    "dialect": "sqlite",
+    "logging" :false,
+    "multipleStatements" : true,
+    "operatorsAliases": false
+  }
+}
