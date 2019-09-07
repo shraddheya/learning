@@ -1,22 +1,11 @@
 const execSync = require("child_process").execSync
+const readline = require("readline")
 const path = require("path")
 const fs = require('fs')
 
 var routing = "true";
 var cssSchema = "sass";
 var projs = [];
-
-
-function askQuestion(query) {
-  const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-  })
-  return new Promise(resolve => rl.question(query, ans => {
-      rl.close();
-      resolve(ans);
-  }))
-}
 
 function logger(){
   for (let i = 0; i < arguments.length; i++) {
@@ -28,18 +17,21 @@ function logger(){
   return 0
 }
 
+// const rl = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout
+// })
+
 process.argv.slice(2).forEach(a => {
   if (a == "-nr") routing = "true";
-  if ("css, scss, sass, less".indexOf(a) !== -1) cssSchema = a;
-  if ("css, scss, sass, less, -nr".indexOf(a) === -1) projs.push(a);
-  if (projs.length < 1){
-    console.log('No new project names / paths specified; pelase specify a path ')
-    console.log('format <project name1> <project name2> <project name3> <project path1> <project path2> <project path3>')
-    const ans = await askQuestion('path / name of the project')
-    projs = ans.split(' ')
-  }
+  if ("css, scss, sass, less".indexOf(a) !== -1) cssSchema = a
+  if ("css, scss, sass, less, -nr".indexOf(a) === -1) projs.push(a)
 })
-
+if (projs.length < 1){
+  console.log('No new project names / paths specified; pelase specify a path ')
+  console.log('format <project name1> <project name2> <project name3> <project path1> <project path2> <project path3>')
+  process.exit()
+}
 projs.forEach(p => {
   var objThis = {}
   var pth = path.dirname(p)
