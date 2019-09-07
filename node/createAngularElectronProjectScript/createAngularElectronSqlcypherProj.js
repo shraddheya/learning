@@ -38,8 +38,8 @@ projs.forEach(p => {
       cwd: pth,
       stdio: "inherit"
     })
-    logger("\nnpm i -D electron@latest electron-reload electron-builder npm-run-all wait-on\n")
-    execSync(`npm i -D electron@latest electron-reload electron-builder npm-run-all wait-on`, {
+    logger("\nnpm i -D electron@latest electron-rebuild  electron-builder npm-run-all wait-on\n")
+    execSync(`npm i -D electron@latest electron-rebuild  electron-builder npm-run-all wait-on`, {
       cwd: p,
       stdio: "inherit"
     })
