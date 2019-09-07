@@ -17,7 +17,7 @@ echo.
 echo packing
 echo.
 call pkg %mypath%\createAngularElectronProj.js -o createAngularElectronProj.exe
-call pkg %mypath%\createAngularElectronSqlcypher.js -o createAngularElectronSqlcypherProj.exe
+call pkg %mypath%\createAngularElectronSqlcypherProj.js -o createAngularElectronSqlcypherProj.exe
 echo.
 echo deploying
 echo.
